@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 from radon.complexity import cc_visit, average_complexity
 
-CORPUS_DIR = r"C:\Users\kylia\Documents\uni\Scriptie\corpus"
+CORPUS_DIR = r"C:\Users\kylia\Documents\uni\Advent_Of_Code_Sctiptie\corpus"
 
 
 def get_part(filename):
