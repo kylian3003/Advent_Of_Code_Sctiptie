@@ -59,16 +59,32 @@ def get_halstead(source):
         return volume, difficulty
     except Exception:
         return None, None
-    
+        
 
 def get_sloc(source):
-    """Count the number of Source Lines of Code (SLOC), ignoring blank lines and comments."""
+    """Count the number of Source Lines of Code (SLOC) — ignoring blank lines and comments."""
     count = 0
     for line in source.splitlines():
         stripped = line.strip()
         if stripped and not stripped.startswith('#'):
             count += 1
     return count
+
+
+def get_comment_ratio(source):
+    """Compute the ratio of comment lines to total non-blank lines.
+    A higher ratio means more of the code is commented/documented."""
+    total = 0
+    comments = 0
+    for line in source.splitlines():
+        stripped = line.strip()
+        if stripped:
+            total += 1
+            if stripped.startswith('#'):
+                comments += 1
+    if total == 0:
+        return None
+    return round(comments / total, 4)
 
 
 def walk_depth(node, depth, nesting_nodes):
@@ -78,8 +94,8 @@ def walk_depth(node, depth, nesting_nodes):
         child_depth = walk_depth(child, depth + 1 if isinstance(node, nesting_nodes) else depth, nesting_nodes)
         max_depth = max(max_depth, child_depth)
     return max_depth
- 
- 
+
+
 def get_max_nesting_depth(source):
     """Find the maximum nesting depth of any block in the file (if/for/while/with/try).
     Returns None if the file can't be parsed."""
@@ -87,7 +103,7 @@ def get_max_nesting_depth(source):
         tree = ast.parse(source)
     except Exception:
         return None
- 
+    
     nesting_nodes = (ast.If, ast.For, ast.While, ast.With, ast.Try)
     return walk_depth(tree, 0, nesting_nodes)
 
@@ -131,6 +147,7 @@ def extract_features(py_file):
         "halstead_difficulty": halstead_difficulty,
         "sloc": get_sloc(source),
         "max_nesting_depth": get_max_nesting_depth(source),
+        "comment_ratio": get_comment_ratio(source),
         # status is used for the summary in main.py, not written to the csv
         "_status": get_file_status(source),
     }
