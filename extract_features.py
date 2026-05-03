@@ -59,7 +59,31 @@ def get_halstead(source):
         return volume, difficulty
     except Exception:
         return None, None
-        
+    
+
+def get_avg_identifier_length(source):
+    """Compute the average length of all identifiers (variable, function, and argument names).
+    Longer names tend to be more descriptive and readable, shorter names are more common
+    in competitive/speed-focused code.
+    Returns None if the file can't be parsed."""
+    try:
+        tree = ast.parse(source)
+        lengths = []
+        for node in ast.walk(tree):
+            # function and argument names
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                lengths.append(len(node.name))
+                for arg in node.args.args:
+                    lengths.append(len(arg.arg))
+            # variable names from assignments
+            elif isinstance(node, ast.Name):
+                lengths.append(len(node.id))
+        if not lengths:
+            return None
+        return round(sum(lengths) / len(lengths), 2)
+    except Exception:
+        return None
+
 
 def get_sloc(source):
     """Count the number of Source Lines of Code (SLOC) — ignoring blank lines and comments."""
@@ -69,6 +93,7 @@ def get_sloc(source):
         if stripped and not stripped.startswith('#'):
             count += 1
     return count
+
 
 
 def get_comment_ratio(source):
@@ -106,7 +131,6 @@ def get_max_nesting_depth(source):
     
     nesting_nodes = (ast.If, ast.For, ast.While, ast.With, ast.Try)
     return walk_depth(tree, 0, nesting_nodes)
-
 
 def get_file_status(source):
     """Check whether a file has functions and whether it parses successfully.
@@ -148,6 +172,7 @@ def extract_features(py_file):
         "sloc": get_sloc(source),
         "max_nesting_depth": get_max_nesting_depth(source),
         "comment_ratio": get_comment_ratio(source),
+        "avg_identifier_length": get_avg_identifier_length(source),
         # status is used for the summary in main.py, not written to the csv
         "_status": get_file_status(source),
     }

@@ -6,7 +6,7 @@ CORPUS_DIR = r"C:\Users\kylia\Documents\uni\Advent_Of_Code_Sctiptie\corpus"
 OUTPUT_CSV = r"C:\Users\kylia\Documents\uni\Advent_Of_Code_Sctiptie\dataset.csv"
 
 # _status is excluded from the csv, it's only used for the summary below
-FIELDNAMES = ["username", "year", "day", "part", "cyclomatic_complexity", "cognitive_complexity", "halstead_volume", "halstead_difficulty", "sloc", "max_nesting_depth", "comment_ratio"]
+FIELDNAMES = ["username", "year", "day", "part", "cyclomatic_complexity", "cognitive_complexity", "halstead_volume", "halstead_difficulty", "sloc", "max_nesting_depth", "comment_ratio", "avg_identifier_length"]
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     has_cog = 0
     no_functions = 0
     parse_errors = 0 
-
+    
     with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
         writer.writeheader()
