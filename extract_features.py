@@ -9,19 +9,19 @@ from cognitive_complexity.api import get_cognitive_complexity as get_cognitive_c
 warnings.filterwarnings("ignore", category=SyntaxWarning)
 
 # libraries that are considered heavy lifting for AoC puzzles
-# this metric does not indicate that the code uses the library for heavy lifting, just that it imports it at all
-# it is used as a metric for analysis when the code has suspiciously low SLOC compared to other solutions from the same puzzle
 HEAVY_LIBRARIES = {"networkx", "z3", "sympy", "scipy"}
 
 
 def get_part(filename):
     """Try to figure out if this file is part 1 or 2 based on the filename.
     Returns None if it can't be determined."""
-    if re.search(r"part[_\-]?1|p1\b|[_\-]1\.|[_\-]?a\.py", filename, re.IGNORECASE):
+    if re.search(r"part[_\-]?1|p1\b|[_\-]1\.|[_\-]?a\.py|[qQ]1\b|solution1|sol1\b", filename, re.IGNORECASE):
         return 1
-    if re.search(r"part[_\-]?2|p2\b|[_\-]2\.|[_\-]?b\.py", filename, re.IGNORECASE):
+    if re.search(r"part[_\-]?2|p2\b|[_\-]2\.|[_\-]?b\.py|[qQ]2\b|solution2|sol2\b", filename, re.IGNORECASE):
         return 2
     return None
+
+
 
 
 def get_cyclomatic_complexity(source):
@@ -34,6 +34,7 @@ def get_cyclomatic_complexity(source):
         return round(average_complexity(results), 2)
     except Exception:
         return None
+    
     
     
 def get_cognitive_complexity(source):
