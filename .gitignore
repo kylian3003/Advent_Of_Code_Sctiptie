@@ -1,7 +1,10 @@
 # Large data folders
 data/
 corpus/
+corpus_backup/
 data_from_drive/
+day_12_2024/
+input_files/
 
 # Environment
 .env
