@@ -1,6 +1,6 @@
 # Code Efficiency vs. Readability in Python: An Analysis of Advent of Code GitHub Repositories
 
-Bachelor's thesis project — BSc Information Science, University of Groningen, 2026.
+Bachelor's thesis project - BSc Informatiekunde, University of Groningen, 2026.
 
 This repository contains the data pipeline used to collect, normalise, and analyse Python solutions from public Advent of Code (AoC) GitHub repositories. The pipeline extracts static complexity metrics and produces the datasets used for the statistical analysis conducted in R.
 
@@ -35,7 +35,7 @@ corpus/
             └── solution.py
 ```
 
-The year and puzzle day are inferred from folder names and filenames using regex patterns. Non-solution files such as tests, utilities, and templates are skipped. Within each day folder, files are deduplicated both by content and by part (Part 1 / Part 2).
+The year and puzzle day are derived from folder names and filenames using regex patterns. Non-solution files such as tests, utilities, and templates are skipped. Within each day folder, files are deduplicated both by content and by part (Part 1 / Part 2).
 
 Flat scripts without any top-level functions are wrapped in a synthetic `main()` before being copied. This ensures that cyclomatic and cognitive complexity can be computed for the full corpus rather than only the files that were already structured as functions.
 
@@ -99,8 +99,12 @@ The raw corpus is not included in this repository. The contributor list is docum
 
 The following derived datasets are included:
 
-- `dataset.csv` — static complexity metrics for 4,262 Python files across 43 contributors
-- `dataset_readability.csv` — LLM-assigned readability scores (Gemini 2.5 Flash Lite, zero-shot) for the same files
-- `human_readability_annotation.csv` — manual readability annotations for a random sample of 49 files, used for inter-annotator agreement validation (weighted Cohen's κ = 0.759)
+- `dataset.csv` - static complexity metrics for 4,262 Python files across 43 contributors
+- `dataset_readability.csv` - LLM-assigned readability scores (Gemini 2.5 Flash Lite, zero-shot) for the same files
+- `human_readability_annotation.csv` - manual readability annotations for a random sample of 49 files, used for inter-annotator agreement validation (weighted Cohen's κ = 0.759)
 
-The `wrap_in_main` step affects approximately 26% of files that were originally written as flat scripts. After this step, 586 files were found to have a source line count of zero and were removed as empty stubs, reducing the dataset from 4,848 to 4,262 files.
+---
+
+## Credits
+
+A full list of contributors can be found in this repository in `contributors.txt`
